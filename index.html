@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen" rel="stylesheet"/>
+    <title>Ghost</title>
+    <style>
+        *,
+        html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Silkscreen';
+        }
+        main {
+            height: 100vh;
+            width: 100vw;
+            background-color: rgb(0, 0, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #lyricContainer {
+            height: 100px;
+            width: 700px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .lyric {
+            display: none;
+            text-align: center;
+            color: white;
+            font-size: 42px;
+        }
+        .lyric.show {
+            display: block;
+            text-align: center;
+            color: white;
+            font-size: 42px;
+
+            animation: in 1s ease-in forwards;
+        }
+        .lyric.show.out {
+            color: white;
+            text-align: center;
+            opacity: 1;
+            font-size: 42px;
+            animation: out 1s ease-in forwards;
+        }
+        @keyframes in {
+            0% {
+                transform: translateY(0px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+        @keyframes out {
+            0% {
+                transform: translateY(0);
+            }
+            98% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            100% {
+                display: none;
+            }
+        }
+        .particle {
+            position: absolute;
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 1);
+            animation: flow 4s linear infinite;
+        }
+        @keyframes flow {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-25px) scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+        }
+        #play {
+            padding: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 20px;
+            border: 1px solid white;
+        } 
+        #play:hover {
+            background-color: transparent;
+            color: white;
+        }
+        #contTitle {
+            display: flex;
+            flex-direction: column;
+        }
+        #title {
+            font-size: 48px;
+            color: white;
+            text-align: center;
+        }
+        #playAgain {
+            display: none;
+            padding: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            font-size: 20px;
+            border: 1px solid white;
+            width: 100%;
+        }
+        #playAgain:hover {
+        background-color: transparent;
+        color: white;
+        }
+        #thanks {
+            display: none;
+            font-size: 48px;
+            color: white;
+            text-align: center;
+        }
+
+        @media  (min-width: 576px) {
+            #lyricContainer {
+                width: 500px;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main id="main">
+        <div id="contTitle">
+            <h1 id="title">"Ghost" <br> By <br>Justin Bieber</h1>
+            <button id="play" onclick="playing()">Play</button>
+        </div>
+        <section>
+            <div id="lyricContainer">
+                <h1 class="lyric">Since the love that you left is all that I get</h1>
+                <h1 class="lyric">I want you to know</h1>
+                <h1 class="lyric">that If I can't be close to you</h1>
+                <h1 class="lyric">I'll settle for the ghost of you</h1>
+                <h1 class="lyric">I miss you more than life <br> (more than life)</h1>
+                <h1 class="lyric">And if you can't be next to me</h1>
+                <h1 class="lyric">Your memory is ecstasy</h1>
+                <h1 class="lyric">I miss you more than life</h1>
+                <h1 class="lyric">I miss you more than life</h1>
+            </div>
+            <audio id="song">
+                <source src="videoplayback (2).mp3" type="audio/mp3">
+            </audio>
+        </section>
+        <div id="contThanks">
+            <h1 id="thanks">Thanks <br> For Watching!</h1>
+            <button id="playAgain" onclick="playAgain()">Kembali</button>
+        </div>
+    </main>
+</body>
+<script>
+    document.getElementById('lyricContainer').style.display = 'none'
+    // particle
+    let particleCount = 120
+    for(let i = 0; i < particleCount; i++) {
+        let particle = document.createElement('div')
+        particle.className = 'particle'
+
+        particle.style.left = `${Math.random() * 99}vw`
+        particle.style.top = `${Math.random() * 99}vh`
+
+        let size = Math.random() * 4 + 2
+        particle.style.height = `${size}px`
+        particle.style.width = `${size}px`
+
+        document.getElementById('main').appendChild(particle)
+    }
+
+    const timing = [1000, 4900, 7000, 11000, 14500, 19300, 24200, 27300, 30400]
+    const duration = [2800, 800, 2800, 2300, 3000, 3700, 2000, 1900, 1900]
+
+   function playing() {
+       document.getElementById('lyricContainer').style.display = 'flex'
+        document.getElementById('playAgain').style.display = 'none'
+        document.getElementById('thanks').style.display = 'none'
+        document.getElementById('contTitle').style.display = 'none'
+        document.getElementById('play').style.display = 'none'
+        let song = document.getElementById('song')
+        song.play()
+        let lyric = document.querySelectorAll('.lyric')
+        lyric.forEach((line, index) => {
+            setTimeout(() => {
+                line.classList.add('show')
+                setTimeout(() => {
+                    line.classList.add('out')
+                }, duration[index])
+            }, timing[index])
+        })
+
+        setTimeout(() => {
+            document.getElementById('lyricContainer').style.display = 'none'
+            document.getElementById('playAgain').style.display = 'block'
+            document.getElementById('thanks').style.display = 'block'
+        }, 34000)
+    }
+
+    function playAgain() {
+        location.reload()
+    }
+
+</script>
+</html>
